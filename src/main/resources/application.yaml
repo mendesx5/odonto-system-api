@@ -8,7 +8,7 @@ spring:
     name: odonto-system
 
   datasource:
-    url: jdbc:postgresql://localhost:${DB_PORT:5432}/${DB_NAME:odontosystem}
+    url: jdbc:postgresql://localhost:${DB_PORT:5432}/${DB_NAME:odontosystem-db}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:senha_local_segura}
     driver-class-name: org.postgresql.Driver
