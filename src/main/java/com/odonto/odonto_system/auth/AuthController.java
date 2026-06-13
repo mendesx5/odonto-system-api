@@ -1,8 +1,6 @@
 package com.odonto.odonto_system.auth;
 
-import com.odonto.odonto_system.user.User;
 import com.odonto.odonto_system.user.UserRepository;
-import io.swagger.v3.oas.annotations.info.Contact;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
