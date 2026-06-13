@@ -19,7 +19,7 @@ public class TokenService {
     private Long expiration;
 
     // Gera um token contendo email e peril do usuário
-    public String genrateToken (String email, String role) {
+    public String generateToken (String email, String role) {
         SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 
         return Jwts.builder()
@@ -46,5 +46,4 @@ public class TokenService {
             return null;
         }
     }
-
 }
