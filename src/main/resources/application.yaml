@@ -28,5 +28,5 @@ spring:
 api:
   security:
     token:
-      secret: ${JWT_SECRET}
-      expiration: ${JWT_EXPIRATION}
+      secret: ${JWT_SECRET:v9y$B&E)H+MbQeThWmZq4t7w!z%C*F-JaNdRgUjXn2r5u8x/A?D(G+KbPeShVkYp}
+      expiration: ${JWT_EXPIRATION:86400000}
