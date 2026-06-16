@@ -3,6 +3,7 @@ package com.odonto.odonto_system.auth;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,14 @@ public class TokenService {
 
     @Value("${api.security.token.expiration}")
     private Long expiration;
+
+    // Garantir que a aplicação suba com um secret seguro
+    @PostConstruct
+    public void validateSecret() {
+        if (secret == null || secret.length() < 32) {
+            throw new IllegalStateException("ERRO: O JWT_SECRET deve ter pelo menos 32 caracteres para garantir a segurança da criptografia HS256.");
+        }
+    }
 
     // Gera um token contendo email e peril do usuário
     public String generateToken (String email, String role) {
