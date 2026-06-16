@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/login", "/api/v1/auth/login", "/error").permitAll()
+                        .requestMatchers("/auth/login", "/api/v1/auth/login ", "/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -37,11 +37,6 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> userRepository.findByEmail(username)
-                .map(user -> org.springframework.security.core.userdetails.User.withUsername(user.getEmail())
-                        .password(user.getPassword())
-                        .roles(user.getRole().name())
-                        .disabled(!user.isActive())
-                        .build())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com esse email " + username));
     }
 
