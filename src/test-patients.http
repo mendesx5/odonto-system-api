@@ -4,7 +4,7 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBvZG9udG8uY29tIiwic
 
 {
   "fullName": "Gabriel Mendes",
-  "cpf": "99999999900",
+  "cpf": "123.456.789-00",
   "dateOfBirth": "2006-08-22",
   "phone": "84900000000",
   "email": "gabriel.mendes@email.com"

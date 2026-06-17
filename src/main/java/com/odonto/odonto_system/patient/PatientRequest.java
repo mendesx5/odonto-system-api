@@ -1,5 +1,6 @@
 package com.odonto.odonto_system.patient;
 
+import com.odonto.odonto_system.shared.util.Cpf;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -12,9 +13,10 @@ public record PatientRequest (
 
     @NotBlank(message = "O CPF é obrigatório")
     @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos")
+    @Cpf
     String cpf,
 
-    @Past(message = "A data de nascimento deve ser uma data passada")
+    @NotNull @Past(message = "A data de nascimento deve ser uma data passada")
     LocalDate dateOfBirth,
 
     @Size(max = 20, message = "O telefone é muito longo")
