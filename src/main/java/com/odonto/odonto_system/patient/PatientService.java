@@ -1,9 +1,13 @@
 package com.odonto.odonto_system.patient;
 
 import com.odonto.odonto_system.shared.exception.ConflictException;
+import com.odonto.odonto_system.shared.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -11,6 +15,7 @@ public class PatientService {
 
     private PatientRepository patientRepository;
 
+    // Criar Paciente
     @Transactional
     public PatientResponse createPatient (PatientRequest patientRequest) {
         if (patientRepository.existsByCpf(patientRequest.cpf())) {
@@ -33,6 +38,46 @@ public class PatientService {
         return new PatientResponse(savedPatient);
     }
 
+    // Listar todos os pacientes
+    @Transactional
+    public List<PatientResponse> findAllPatients () {
+            return patientRepository.findAll().stream()
+                    .map(PatientResponse::new)
+                    .toList();
+    }
 
+    // Buscar paciente por id
+    @Transactional
+    public PatientResponse findById (UUID id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
+        return new PatientResponse(patient);
+    }
 
+    // Atualizar paciente
+    @Transactional
+    public PatientResponse updatePatient (UUID id, PatientRequest patientRequest) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o ID: " + id));
+
+        if (!patient.getCpf().equals(patientRequest.cpf()) && patientRepository.existsByCpf(patientRequest.cpf())) {
+            throw new ConflictException("Já existe outro paciente cadastrado com este CPF.");
+        }
+
+        patient.setFullName(patientRequest.fullName());
+        patient.setCpf(patientRequest.cpf());
+        patient.setDateOfBirth(patientRequest.dateOfBirth());
+        patient.setPhone(patientRequest.phone());
+        patient.setEmail(patientRequest.email());
+        patient.setAddress(patientRequest.address());
+        patient.setNotes(patientRequest.notes());
+
+        return new PatientResponse(patientRepository.save(patient));
+    }
+
+    // Deletar paciente
+    @Transactional
+    public void deletePatient (UUID id) {
+        patientRepository.deleteById(id);
+    }
 }
