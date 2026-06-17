@@ -1,0 +1,11 @@
+POST http://localhost:8080/api/v1/patients
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBvZG9udG8uY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzgxNzE1MDU3LCJleHAiOjE3ODE4MDE0NTd9.Zty28YVu2XGheJRdEY--NJYwqfslLeHUwU9M0lMNtU_w1LGRo2xX9_PMTp4gapq3EgHh-QGmDsRpmfrQTiJutA
+
+{
+  "fullName": "Gabriel Mendes",
+  "cpf": "99999999900",
+  "dateOfBirth": "2006-08-22",
+  "phone": "84900000000",
+  "email": "gabriel.mendes@email.com"
+}

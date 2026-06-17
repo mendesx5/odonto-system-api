@@ -14,7 +14,6 @@ public record PatientRequest (
     @Pattern(regexp = "\\d{11}", message = "O CPF deve conter 11 dígitos numéricos")
     String cpf,
 
-    @NotBlank(message = "A data de Nascimento é obrigatória")
     @Past(message = "A data de nascimento deve ser uma data passada")
     LocalDate dateOfBirth,
 
