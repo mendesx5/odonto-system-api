@@ -13,7 +13,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PatientService {
 
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
 
     // Criar Paciente
     @Transactional
@@ -75,9 +75,14 @@ public class PatientService {
         return new PatientResponse(patientRepository.save(patient));
     }
 
-    // Deletar paciente
+    // Deletar paciente (Soft delete)
     @Transactional
     public void deletePatient (UUID id) {
-        patientRepository.deleteById(id);
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado com o ID: " + id));
+
+        patient.setActive(false);
+
+        patientRepository.save(patient);
     }
 }
