@@ -2,11 +2,13 @@ package com.odonto.odonto_system.patient;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,8 +24,13 @@ public class PatientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PatientResponse>> findAll() {
-        return ResponseEntity.ok(patientService.findAllPatients());
+    public ResponseEntity<Page<PatientResponse>> findAll(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String cpf,
+            @PageableDefault(size = 10, sort = "fullName") Pageable pageable
+            ) {
+        Page<PatientResponse> page = patientService.findAllPatients(name, cpf, pageable);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/{id}")

@@ -4,9 +4,10 @@ import com.odonto.odonto_system.shared.exception.ConflictException;
 import com.odonto.odonto_system.shared.exception.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,22 +37,6 @@ public class PatientService {
         Patient savedPatient = patientRepository.save(patient);
 
         return new PatientResponse(savedPatient);
-    }
-
-    // Listar todos os pacientes
-    @Transactional
-    public List<PatientResponse> findAllPatients () {
-            return patientRepository.findAll().stream()
-                    .map(PatientResponse::new)
-                    .toList();
-    }
-
-    // Buscar paciente por id
-    @Transactional
-    public PatientResponse findById (UUID id) {
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
-        return new PatientResponse(patient);
     }
 
     // Atualizar paciente
@@ -85,4 +70,24 @@ public class PatientService {
 
         patientRepository.save(patient);
     }
+
+    // Listar todos os pacientes
+    @Transactional
+    public Page<PatientResponse> findAllPatients (String name, String cpf, Pageable pageable) {
+        String nameFilter = name != null ? name : "";
+        String cpfFilter = cpf != null ? cpf : "";
+
+        return patientRepository
+                .findByFullNameOrCpf(nameFilter, cpfFilter, pageable)
+                .map(PatientResponse::new);
+    }
+
+    // Buscar paciente por id
+    @Transactional
+    public PatientResponse findById (UUID id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
+        return new PatientResponse(patient);
+    }
+
 }

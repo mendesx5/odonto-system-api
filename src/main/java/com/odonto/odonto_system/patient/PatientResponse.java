@@ -3,6 +3,7 @@ package com.odonto.odonto_system.patient;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.UUID;
 
 public record PatientResponse (
@@ -10,6 +11,7 @@ public record PatientResponse (
         String fullName,
         String cpf,
         LocalDate dateOfBirth,
+        int age,
         String phone,
         String email,
         String address,
@@ -22,6 +24,7 @@ public record PatientResponse (
                 patient.getFullName(),
                 patient.getCpf(),
                 patient.getDateOfBirth(),
+                Period.between(patient.getDateOfBirth(), LocalDate.now()).getYears(),
                 patient.getPhone(),
                 patient.getEmail(),
                 patient.getAddress(),
