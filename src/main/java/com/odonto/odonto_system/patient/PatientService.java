@@ -78,7 +78,7 @@ public class PatientService {
         String cpfFilter = cpf != null ? cpf : "";
 
         return patientRepository
-                .findByFullNameOrCpf(nameFilter, cpfFilter, pageable)
+                .findByFullNameContainingIgnoreCaseOrCpfContaining(nameFilter, cpfFilter, pageable)
                 .map(PatientResponse::new);
     }
 

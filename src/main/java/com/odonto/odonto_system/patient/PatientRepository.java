@@ -12,5 +12,5 @@ public interface PatientRepository extends JpaRepository<Patient, UUID> {
     boolean existsByCpf(String cpf);
     Patient findByCpf(String cpf);
 
-    Page<Patient> findByFullNameOrCpf(String fullName, String cpf, Pageable pageable);
+    Page<Patient> findByFullNameContainingIgnoreCaseOrCpfContaining(String fullName, String cpf, Pageable pageable);
 }
