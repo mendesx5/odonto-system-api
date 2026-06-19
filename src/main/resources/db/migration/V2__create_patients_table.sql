@@ -1,5 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE patients (
     id UUID PRIMARY KEY,
     full_name VARCHAR(150) NOT NULL,
