@@ -39,6 +39,25 @@ public class PatientService {
         return new PatientResponse(savedPatient);
     }
 
+    // Listar todos os pacientes
+    @Transactional
+    public Page<PatientResponse> findAllPatients (String name, String cpf, Pageable pageable) {
+        String nameFilter = name != null ? name : "";
+        String cpfFilter = cpf != null ? cpf : "";
+
+        return patientRepository
+                .findByFullNameContainingIgnoreCaseOrCpfContaining(nameFilter, cpfFilter, pageable)
+                .map(PatientResponse::new);
+    }
+
+    // Buscar paciente por id
+    @Transactional
+    public PatientResponse findById (UUID id) {
+        Patient patient = patientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
+        return new PatientResponse(patient);
+    }
+
     // Atualizar paciente
     @Transactional
     public PatientResponse updatePatient (UUID id, PatientRequest patientRequest) {
@@ -69,25 +88,6 @@ public class PatientService {
         patient.setActive(false);
 
         patientRepository.save(patient);
-    }
-
-    // Listar todos os pacientes
-    @Transactional
-    public Page<PatientResponse> findAllPatients (String name, String cpf, Pageable pageable) {
-        String nameFilter = name != null ? name : "";
-        String cpfFilter = cpf != null ? cpf : "";
-
-        return patientRepository
-                .findByFullNameContainingIgnoreCaseOrCpfContaining(nameFilter, cpfFilter, pageable)
-                .map(PatientResponse::new);
-    }
-
-    // Buscar paciente por id
-    @Transactional
-    public PatientResponse findById (UUID id) {
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
-        return new PatientResponse(patient);
     }
 
 }

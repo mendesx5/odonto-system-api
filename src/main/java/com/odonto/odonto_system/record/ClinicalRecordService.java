@@ -48,6 +48,26 @@ public class ClinicalRecordService {
         return new ClinicalRecordResponse(clinicalRecord);
     }
 
+    // Listar prontuário de um paciente específico
+    @Transactional
+    public Page<ClinicalRecordResponse> findByPatientId (UUID patientId, Pageable pageable) {
+        if (!patientRepository.existsById(patientId)) {
+            throw new ResourceNotFoundException("Paciente não encontrado com o ID: " + patientId);
+        }
+
+        return clinicalRecordRepository.findByPatientIdAndActiveTrue(patientId, pageable)
+                .map(ClinicalRecordResponse::new);
+    }
+
+    // Buscar prontuário pelo id
+    @Transactional
+    public ClinicalRecordResponse findById (UUID id) {
+        ClinicalRecord clinicalRecord = clinicalRecordRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
+
+        return new ClinicalRecordResponse(clinicalRecord);
+    }
+
     // Atualizar prontuário
     @Transactional
     public ClinicalRecordResponse update (UUID id, ClinicalRecordRequest request) {
@@ -71,26 +91,6 @@ public class ClinicalRecordService {
 
         clinicalRecord.setActive(false);
         clinicalRecordRepository.save(clinicalRecord);
-    }
-
-    // Listar prontuário de um paciente específico
-    @Transactional
-    public Page<ClinicalRecordResponse> findByPatientId (UUID patientId, Pageable pageable) {
-        if (!patientRepository.existsById(patientId)) {
-            throw new ResourceNotFoundException("Paciente não encontrado com o ID: " + patientId);
-        }
-
-        return clinicalRecordRepository.findByPatientIdAndActiveTrue(patientId, pageable)
-                .map(ClinicalRecordResponse::new);
-    }
-
-    // Buscar prontuário pelo id
-    @Transactional
-    public ClinicalRecordResponse findById (UUID id) {
-        ClinicalRecord clinicalRecord = clinicalRecordRepository.findByIdAndActiveTrue(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
-
-        return new ClinicalRecordResponse(clinicalRecord);
     }
 
 }
