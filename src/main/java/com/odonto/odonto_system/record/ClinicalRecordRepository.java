@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface ClinicalRecordRepository extends JpaRepository<ClinicalRecord, UUID> {
     Page<ClinicalRecord> findByPatientIdAndActiveTrue(UUID id, Pageable pageable);
 
-    Optional<ClinicalRecord> findByPatientIdAndActiveTrue(UUID id);
+    Optional<ClinicalRecord> findByIdAndActiveTrue(UUID id);
 }
