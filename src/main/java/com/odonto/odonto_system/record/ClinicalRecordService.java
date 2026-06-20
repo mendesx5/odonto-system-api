@@ -45,7 +45,9 @@ public class ClinicalRecordService {
                 .active(true)
                 .build();
 
-        return new ClinicalRecordResponse(clinicalRecord);
+        ClinicalRecord savedRecord = clinicalRecordRepository.save(clinicalRecord);
+
+        return new ClinicalRecordResponse(savedRecord);
     }
 
     // Listar prontuário de um paciente específico

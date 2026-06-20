@@ -25,7 +25,7 @@ public class AdminUserSeeder {
                 User admin = User.builder()
                         .email(adminEmail)
                         .password(encoder.encode(adminPassword))
-                        .fullname("Gabriel Mendes Admin")
+                        .fullName("Gabriel Mendes Admin")
                         .role(UserRole.ADMIN)
                         .active(true)
                         .build();

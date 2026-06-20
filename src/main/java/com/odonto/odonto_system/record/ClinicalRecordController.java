@@ -23,13 +23,12 @@ public class ClinicalRecordController {
             @PathVariable UUID patientId,
             @Valid @RequestBody ClinicalRecordRequest request
     ) {
-
         return ResponseEntity.status(HttpStatus.CREATED).body(clinicalRecordService.create(request));
     }
 
     @GetMapping("/patients/{patientId}/records")
     public ResponseEntity<Page<ClinicalRecordResponse>> findByPatientId(
-            @RequestParam(required = false) UUID patientId,
+            @PathVariable(required = false) UUID patientId,
             @PageableDefault(size = 10, sort = "recordDate", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         Page<ClinicalRecordResponse> page = clinicalRecordService.findByPatientId(patientId, pageable);

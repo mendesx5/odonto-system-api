@@ -1,9 +1,9 @@
 package com.odonto.odonto_system.appointment;
 
 public enum AppointmentStatus {
-    AGENDADO,
-    CONFIRMADO,
-    CONCLUIDO,
-    CANCELADO,
-    NAO_COMPARECEU
+    SCHEDULED,
+    CONFIRMED,
+    COMPLETED,
+    CANCELLED,
+    NO_SHOW
 }

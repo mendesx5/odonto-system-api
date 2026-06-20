@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ExamFileRepository extends JpaRepository<ExamFile, Long> {
+public interface ExamFileRepository extends JpaRepository<ExamFile, UUID> {
 
     Page<ExamFile> findByPatientIdAndActiveTrue (UUID patientId, Pageable pageable);
 
