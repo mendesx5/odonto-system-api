@@ -42,7 +42,7 @@ public class AppointmentService {
                 .dentist(dentist)
                 .startTime(request.startTime())
                 .endTime(request.endTime())
-                .status(AppointmentStatus.SCHEDULED)
+                .status(AppointmentStatus.AGENDADO)
                 .reason(request.reason())
                 .notes(request.notes())
                 .build();

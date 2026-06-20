@@ -12,7 +12,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, UUID> 
     @Query("SELECT COUNT(a) > 0 FROM Appointment a WHERE " +
             "a.dentist.id = :dentistId AND " +
             "a.id != :excludeId AND " +
-            "a.status NOT IN ('CANCELLED', 'NO_SHOW') AND " +
+            "a.status NOT IN ('CANCELADO', 'NAO_COMPARECEU') AND " +
             "a.startTime < :endTime AND " +
             "a.endTime > :startTime")
 
