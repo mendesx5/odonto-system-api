@@ -1,0 +1,16 @@
+INSERT INTO procedure_catalog (id, name, category, default_duration_minutes) VALUES
+(gen_random_uuid(), 'Consulta inicial',               'DIAGNOSTICO',  30),
+(gen_random_uuid(), 'Radiografia periapical',         'DIAGNOSTICO',  15),
+(gen_random_uuid(), 'Radiografia panorâmica',         'DIAGNOSTICO',  20),
+(gen_random_uuid(), 'Tomografia',                     'DIAGNOSTICO',  30),
+(gen_random_uuid(), 'Profilaxia (limpeza)',           'PERIODONTIA',  45),
+(gen_random_uuid(), 'Raspagem supragengival',         'PERIODONTIA',  60),
+(gen_random_uuid(), 'Restauração em resina',          'DENTISTICA',   60),
+(gen_random_uuid(), 'Tratamento de canal (1 canal)',  'ENDODONTIA',  120),
+(gen_random_uuid(), 'Tratamento de canal (2+ canais)','ENDODONTIA',  180),
+(gen_random_uuid(), 'Extração simples',               'CIRURGIA',     30),
+(gen_random_uuid(), 'Extração de siso',               'CIRURGIA',     60),
+(gen_random_uuid(), 'Clareamento dental',             'ESTETICA',     90),
+(gen_random_uuid(), 'Instalação de aparelho fixo',   'ORTODONTIA',  120),
+(gen_random_uuid(), 'Manutenção de aparelho',         'ORTODONTIA',   30),
+(gen_random_uuid(), 'Faceta em resina',               'ESTETICA',     90);
