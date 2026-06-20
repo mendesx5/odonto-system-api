@@ -22,6 +22,9 @@ public class PatientService {
         if (patientRepository.existsByCpf(patientRequest.cpf())) {
             throw new ConflictException("Já existe um paciente cadastrado com este CPF.");
         }
+        if (patientRepository.existsByCpfAndActiveTrue(patientRequest.cpf())) {
+            throw new ConflictException("Já existe um paciente ativo cadastrado com este CPF.");
+        }
 
         Patient patient = Patient.builder()
                 .fullName(patientRequest.fullName())
@@ -45,16 +48,15 @@ public class PatientService {
         String nameFilter = name != null ? name : "";
         String cpfFilter = cpf != null ? cpf : "";
 
-        return patientRepository
-                .findByFullNameContainingIgnoreCaseOrCpfContaining(nameFilter, cpfFilter, pageable)
+        return patientRepository.findActivePatients(nameFilter, cpfFilter, pageable)
                 .map(PatientResponse::new);
     }
 
     // Buscar paciente por id
     @Transactional
-    public PatientResponse findById (UUID id) {
-        Patient patient = patientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado"));
+    public PatientResponse findById(UUID id) {
+        Patient patient = patientRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Paciente não encontrado ou já foi inativado. ID: " + id));
         return new PatientResponse(patient);
     }
 
