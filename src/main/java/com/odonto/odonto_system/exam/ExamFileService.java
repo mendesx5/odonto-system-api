@@ -66,7 +66,8 @@ public class ExamFileService {
                 .active(true)
                 .build();
 
-        return new ExamFileResponse(examFileRepository.save(examFile));
+        ExamFile savedExamFile = examFileRepository.save(examFile);
+        return new ExamFileResponse(savedExamFile);
     }
 
     // Buscar exame individual por ID

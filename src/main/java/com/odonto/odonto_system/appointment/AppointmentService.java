@@ -47,7 +47,8 @@ public class AppointmentService {
                 .notes(request.notes())
                 .build();
 
-        return new AppointmentResponse(appointmentRepository.save(appointment));
+        Appointment savedAppointment = appointmentRepository.save(appointment);
+        return new AppointmentResponse(savedAppointment);
     }
 
     // Listar Todas as Consultas
@@ -60,7 +61,7 @@ public class AppointmentService {
     @Transactional
     public AppointmentResponse findById (UUID id) {
         Appointment appointment = appointmentRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado."));
+                .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado"));
         return new AppointmentResponse(appointment);
     }
 
@@ -86,7 +87,8 @@ public class AppointmentService {
         appointment.setReason(request.reason());
         appointment.setNotes(request.notes());
 
-        return new AppointmentResponse(appointmentRepository.save(appointment));
+        Appointment savedAppointment = appointmentRepository.save(appointment);
+        return new AppointmentResponse(savedAppointment);
     }
 
     // Mudar Status
@@ -96,7 +98,8 @@ public class AppointmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado."));
 
         appointment.setStatus(newStatus);
-        return new AppointmentResponse(appointmentRepository.save(appointment));
+        Appointment savedAppointment = appointmentRepository.save(appointment);
+        return new AppointmentResponse(savedAppointment);
     }
 
 }

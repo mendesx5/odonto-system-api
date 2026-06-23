@@ -1,7 +1,5 @@
 package com.odonto.odonto_system.patient;
 
-import jakarta.validation.constraints.*;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.UUID;

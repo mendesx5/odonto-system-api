@@ -78,7 +78,8 @@ public class PatientService {
         patient.setAddress(patientRequest.address());
         patient.setNotes(patientRequest.notes());
 
-        return new PatientResponse(patientRepository.save(patient));
+        Patient savedPatient = patientRepository.save(patient);
+        return new PatientResponse(savedPatient);
     }
 
     // Deletar paciente (Soft delete)

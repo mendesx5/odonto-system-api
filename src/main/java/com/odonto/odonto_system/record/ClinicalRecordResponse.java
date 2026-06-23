@@ -1,7 +1,10 @@
 package com.odonto.odonto_system.record;
 
+import com.odonto.odonto_system.procedure.ProcedureResponse;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public record ClinicalRecordResponse(
@@ -15,8 +18,9 @@ public record ClinicalRecordResponse(
         String diagnosis,
         String treatmentPlan,
         String evolutionNotes,
-        LocalDateTime createdAt,
-        boolean active
+        boolean active,
+        List<ProcedureResponse>  procedures,
+        LocalDateTime createdAt
 ) {
     public ClinicalRecordResponse(ClinicalRecord record) {
         this (
@@ -30,8 +34,10 @@ public record ClinicalRecordResponse(
                 record.getDiagnosis(),
                 record.getTreatmentPlan(),
                 record.getEvolutionNotes(),
-                record.getCreatedAt(),
-                record.isActive()
+                record.isActive(),
+                record.getProcedures() != null ?
+                        record.getProcedures().stream().map(ProcedureResponse::new).toList() : List.of(),
+                record.getCreatedAt()
         );
     }
 }

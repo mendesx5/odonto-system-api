@@ -46,7 +46,6 @@ public class ClinicalRecordService {
                 .build();
 
         ClinicalRecord savedRecord = clinicalRecordRepository.save(clinicalRecord);
-
         return new ClinicalRecordResponse(savedRecord);
     }
 
@@ -82,7 +81,8 @@ public class ClinicalRecordService {
         clinicalRecord.setTreatmentPlan(request.treatmentPlan());
         clinicalRecord.setEvolutionNotes(request.evolutionNotes());
 
-        return new ClinicalRecordResponse(clinicalRecordRepository.save(clinicalRecord));
+        ClinicalRecord savedRecord = clinicalRecordRepository.save(clinicalRecord);
+        return new ClinicalRecordResponse(savedRecord);
     }
 
     // Soft delete do prontuário

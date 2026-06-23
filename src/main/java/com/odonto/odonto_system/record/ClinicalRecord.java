@@ -1,12 +1,15 @@
 package com.odonto.odonto_system.record;
 
 import com.odonto.odonto_system.patient.Patient;
+import com.odonto.odonto_system.procedure.ProcedureCatalog;
 import com.odonto.odonto_system.shared.BaseEntity;
 import com.odonto.odonto_system.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -47,5 +50,14 @@ public class ClinicalRecord extends BaseEntity {
 
     @Column(nullable = false)
     private boolean active = true;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "record_procedures",
+            joinColumns = @JoinColumn(name = "clinical_record_id"),
+            inverseJoinColumns = @JoinColumn(name = "procedure_id")
+    )
+    @Builder.Default
+    private List<ProcedureCatalog> procedures = new ArrayList<>();
 
 }
