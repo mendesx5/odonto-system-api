@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -98,8 +100,24 @@ public class AppointmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Agendamento não encontrado."));
 
         appointment.setStatus(newStatus);
+
+        if (newStatus == AppointmentStatus.AGUARDANDO) {
+            appointment.setArrivedAt(java.time.LocalDateTime.now());
+        }
+
         Appointment savedAppointment = appointmentRepository.save(appointment);
         return new AppointmentResponse(savedAppointment);
+    }
+
+    @Transactional
+    public List<WaitingRoomResponse> getWaitingRoom () {
+        java.time.LocalDateTime startOfDay = java.time.LocalDateTime.now().toLocalDate().atStartOfDay();
+        java.time.LocalDateTime endOfDay = java.time.LocalDateTime.now().toLocalDate().atTime(23, 59, 59);
+
+        return appointmentRepository.findAppointmentsByTimeRange(startOfDay, endOfDay).stream()
+                .filter(a -> a.getStatus() == AppointmentStatus.AGUARDANDO || a.getStatus() == AppointmentStatus.EM_ATENDIMENTO)
+                .map(WaitingRoomResponse::new)
+                .toList();
     }
 
 }
