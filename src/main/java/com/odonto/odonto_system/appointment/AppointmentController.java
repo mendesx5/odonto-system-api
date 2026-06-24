@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -49,6 +50,11 @@ public class AppointmentController {
             @Valid @RequestBody StatusUpdateRequest request
     ) {
         return ResponseEntity.ok(appointmentService.updateStatus(id, request.status()));
+    }
+
+    @GetMapping("/waiting-room")
+    public ResponseEntity<List<WaitingRoomResponse>> getWaitingRoom() {
+        return ResponseEntity.ok(appointmentService.getWaitingRoom());
     }
 
 }
