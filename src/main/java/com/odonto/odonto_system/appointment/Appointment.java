@@ -41,4 +41,7 @@ public class Appointment extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
+    @Column(name = "arrived_at")
+    private LocalDateTime arrivedAt;
+
 }
