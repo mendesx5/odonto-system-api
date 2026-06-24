@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 public record ClinicalRecordRequest(
@@ -18,5 +19,7 @@ public record ClinicalRecordRequest(
 
         String diagnosis,
         String treatmentPlan,
-        String evolutionNotes
+        String evolutionNotes,
+
+        List<UUID> procedureIds
 ) {}

@@ -2,6 +2,8 @@ package com.odonto.odonto_system.record;
 
 import com.odonto.odonto_system.patient.Patient;
 import com.odonto.odonto_system.patient.PatientRepository;
+import com.odonto.odonto_system.procedure.ProcedureCatalog;
+import com.odonto.odonto_system.procedure.ProcedureCatalogRepository;
 import com.odonto.odonto_system.shared.exception.ConflictException;
 import com.odonto.odonto_system.shared.exception.ResourceNotFoundException;
 import com.odonto.odonto_system.user.User;
@@ -12,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,6 +24,7 @@ public class ClinicalRecordService {
 
     private final ClinicalRecordRepository clinicalRecordRepository;
     private final PatientRepository patientRepository;
+    private final ProcedureCatalogRepository procedureCatalogRepository;
 
     // Criar Prontuário
     @Transactional
@@ -34,6 +39,8 @@ public class ClinicalRecordService {
         User dentist = (User) SecurityContextHolder.getContext()
                 .getAuthentication().getPrincipal();
 
+        List<ProcedureCatalog> procedures = resolveProcedures(request.procedureIds());
+
         ClinicalRecord clinicalRecord = ClinicalRecord.builder()
                 .patient(patient)
                 .dentist(dentist)
@@ -42,6 +49,7 @@ public class ClinicalRecordService {
                 .diagnosis(request.diagnosis())
                 .treatmentPlan(request.treatmentPlan())
                 .evolutionNotes(request.evolutionNotes())
+                .procedures(procedures)
                 .active(true)
                 .build();
 
@@ -81,6 +89,9 @@ public class ClinicalRecordService {
         clinicalRecord.setTreatmentPlan(request.treatmentPlan());
         clinicalRecord.setEvolutionNotes(request.evolutionNotes());
 
+        List<ProcedureCatalog> procedures = resolveProcedures(request.procedureIds());
+        clinicalRecord.setProcedures(procedures);
+
         ClinicalRecord savedRecord = clinicalRecordRepository.save(clinicalRecord);
         return new ClinicalRecordResponse(savedRecord);
     }
@@ -93,6 +104,14 @@ public class ClinicalRecordService {
 
         clinicalRecord.setActive(false);
         clinicalRecordRepository.save(clinicalRecord);
+    }
+
+    // Busca os ProcedureCatalog pelos IDs
+    private List<ProcedureCatalog> resolveProcedures(List<UUID> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return procedureCatalogRepository.findAllById(ids);
     }
 
 }
