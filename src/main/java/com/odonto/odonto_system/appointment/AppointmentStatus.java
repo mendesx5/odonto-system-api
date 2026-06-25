@@ -7,5 +7,6 @@ public enum AppointmentStatus {
     EM_ATENDIMENTO,
     CONCLUIDO,
     CANCELADO,
-    NAO_COMPARECEU
+    NAO_COMPARECEU,
+    BLOQUEADO
 }

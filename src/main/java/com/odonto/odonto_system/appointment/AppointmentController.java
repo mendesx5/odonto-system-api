@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -55,6 +56,12 @@ public class AppointmentController {
     @GetMapping("/waiting-room")
     public ResponseEntity<List<WaitingRoomResponse>> getWaitingRoom() {
         return ResponseEntity.ok(appointmentService.getWaitingRoom());
+    }
+
+    @PostMapping("/block")
+    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')") // Garante controle de acesso
+    public ResponseEntity<AppointmentResponse> createBlock(@Valid @RequestBody BlockScheduleRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(appointmentService.createBlock(request));
     }
 
 }

@@ -120,4 +120,28 @@ public class AppointmentService {
                 .toList();
     }
 
+    @Transactional
+    public AppointmentResponse createBlock(BlockScheduleRequest request) {
+        User dentist = userRepository.findById(request.dentistId())
+                .orElseThrow(() -> new ResourceNotFoundException("Dentista não encontrado."));
+
+        UUID temporaryId = UUID.randomUUID();
+        if (appointmentRepository.existsConflict(request.dentistId(), request.startTime(), request.endTime(), temporaryId)) {
+            throw new ConflictException("Não foi possível bloquear o horário: O dentista já possui um compromisso ou consulta neste período.");
+        }
+
+        Appointment block = Appointment.builder()
+                .patient(null)
+                .dentist(dentist)
+                .startTime(request.startTime())
+                .endTime(request.endTime())
+                .status(AppointmentStatus.BLOQUEADO)
+                .reason(request.reason())
+                .notes("Bloqueio de agenda institucional/pessoal.")
+                .build();
+
+        Appointment savedAppointment = appointmentRepository.save(block);
+        return new AppointmentResponse(savedAppointment);
+    }
+
 }
