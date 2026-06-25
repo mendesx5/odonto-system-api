@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -109,6 +109,7 @@ public class AppointmentService {
         return new AppointmentResponse(savedAppointment);
     }
 
+    // Sala de espera
     @Transactional
     public List<WaitingRoomResponse> getWaitingRoom () {
         java.time.LocalDateTime startOfDay = java.time.LocalDateTime.now().toLocalDate().atStartOfDay();
@@ -120,6 +121,7 @@ public class AppointmentService {
                 .toList();
     }
 
+    // Bloqueio de horário por dentista
     @Transactional
     public AppointmentResponse createBlock(BlockScheduleRequest request) {
         User dentist = userRepository.findById(request.dentistId())
@@ -142,6 +144,51 @@ public class AppointmentService {
 
         Appointment savedAppointment = appointmentRepository.save(block);
         return new AppointmentResponse(savedAppointment);
+    }
+
+    // Horários livres na agenda
+    @Transactional
+    public List<FreeSlotResponse> getFreeSlots (UUID dentistId, java.time.LocalDate date) {
+        // Define o horário de funcionamento
+        LocalDateTime startOfClinicDay = date.atTime(8, 0, 0);
+        LocalDateTime endOfClinicDay = date.atTime(18, 0, 0);
+
+        // Busca todos os agendamentos e bloqueios do dentista nesse dia
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByTimeRange(
+                date.atStartOfDay(),
+                date.atTime(23, 59, 59)
+        );
+
+        // Filtra apenas os compromissos ocupados
+        List<Appointment> occupiedSlots = appointments.stream()
+                .filter(a -> a.getDentist().getId().equals(dentistId))
+                .filter(a -> a.getStatus() != AppointmentStatus.CANCELADO && a.getStatus() != AppointmentStatus.NAO_COMPARECEU)
+                .sorted(java.util.Comparator.comparing(Appointment::getStartTime)) // Ordena por horário de início
+                .toList();
+
+        List<FreeSlotResponse> freeSlots = new java.util.ArrayList<>();
+        LocalDateTime currentPointer = startOfClinicDay;
+
+        // Varre os agendamentos e encontra os espaços vazios entre eles
+        for (Appointment app : occupiedSlots) {
+
+            if (app.getStartTime().isAfter(currentPointer)) {
+                if (currentPointer.isBefore(endOfClinicDay)) {
+                    LocalDateTime gapEnd = app.getStartTime().isBefore(endOfClinicDay) ? app.getStartTime() : endOfClinicDay;
+                    freeSlots.add(new FreeSlotResponse(currentPointer.toLocalTime(), gapEnd.toLocalTime()));
+                }
+            }
+
+            if (app.getEndTime().isAfter(currentPointer)) {
+                currentPointer = app.getEndTime();
+            }
+        }
+
+        if (currentPointer.isBefore(endOfClinicDay)) {
+            freeSlots.add(new FreeSlotResponse(currentPointer.toLocalTime(), endOfClinicDay.toLocalTime()));
+        }
+
+        return freeSlots;
     }
 
 }

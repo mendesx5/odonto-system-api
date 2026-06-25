@@ -64,4 +64,13 @@ public class AppointmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(appointmentService.createBlock(request));
     }
 
+    @GetMapping("/free-slots")
+    public ResponseEntity<List<FreeSlotResponse>> getFreeSlots(
+            @RequestParam UUID dentistId,
+            @RequestParam @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate date
+    ) {
+        List<FreeSlotResponse> freeSlots = appointmentService.getFreeSlots(dentistId, date);
+        return ResponseEntity.ok(freeSlots);
+    }
+
 }
