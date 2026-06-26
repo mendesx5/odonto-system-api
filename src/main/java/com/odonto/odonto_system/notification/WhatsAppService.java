@@ -10,7 +10,6 @@ import org.springframework.web.client.RestClient;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class WhatsAppService {
 
     private final RestClient restClient;
@@ -23,6 +22,10 @@ public class WhatsAppService {
 
     @Value("${EVOLUTION_INSTANCE:odontosystem}")
     private String instance;
+
+    public WhatsAppService() {
+        this.restClient = RestClient.builder().build();
+    }
 
     @Async
     public void sendMessage (String toPhone, String text) {
