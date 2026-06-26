@@ -35,7 +35,11 @@ public class AppointmentService {
 
         // Validação de horário
         UUID temporaryId = UUID.randomUUID();
-        if (appointmentRepository.existsConflict(request.dentistId(), request.startTime(), request.endTime(), temporaryId)) {
+        if (appointmentRepository.existsConflict(
+                request.dentistId(),
+                request.startTime(),
+                request.endTime(),
+                temporaryId)) {
             throw new ConflictException("Conflito de agenda: O dentista já possui um compromisso neste horário.");
         }
 
