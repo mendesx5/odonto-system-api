@@ -18,10 +18,14 @@ spring:
     password: ${DB_PASSWORD:senha_local_segura}
     driver-class-name: org.postgresql.Driver
 
+  config:
+    activate:
+      on-profile: prod
+
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
