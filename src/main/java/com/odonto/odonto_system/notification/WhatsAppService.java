@@ -24,10 +24,6 @@ public class WhatsAppService {
     @Value("${EVOLUTION_INSTANCE:odontosystem}")
     private String instance;
 
-    public WhatsAppService() {
-        this.restClient = RestClient.builder().build();
-    }
-
     @Async
     public void sendMessage (String toPhone, String text) {
         String formattedPhone = toPhone.replaceAll("[^0-9]", "");
